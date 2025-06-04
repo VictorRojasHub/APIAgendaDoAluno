@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database');
 const User = require('./models/User');
+const faltasRouter = require('./routes/faltas');
 
 dotenv.config();
 
@@ -19,3 +20,5 @@ sequelize.sync()
         app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
     })
     .catch(err => console.error('Erro ao conectar ao banco de dados:', err));
+    
+app.use('/api/faltas', faltasRouter);
