@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Falta, Aluno } = require('../models');
+const { Op } = require('sequelize');
 
 // Professor POST - registrar falta
 router.post('/', async (req, res) => {
@@ -36,5 +37,30 @@ router.get('/aluno/:id', async (req, res) => {
     res.status(500).json({ erro: error.message });
   }
 });
+
+
+// GET – Percentual de faltas do aluno
+router.get('/aluno/:id/percentual', async (req, res) => {
+  const alunoId = req.params.id;
+  const DIAS_LETIVOS = 200;
+
+  try {
+    const totalFaltas = await Falta.count({
+      where: { alunoId }
+    });
+
+    const percentual = (totalFaltas / DIAS_LETIVOS) * 100;
+
+    res.json({
+      alunoId,
+      totalFaltas,
+      percentual: percentual.toFixed(2) + '%',
+      diasLetivos: DIAS_LETIVOS
+    });
+  } catch (error) {
+    res.status(500).json({ erro: error.message });
+  }
+});
+
 
 module.exports = router;
