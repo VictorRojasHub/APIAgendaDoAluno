@@ -2,7 +2,7 @@ const Usuario = require('../models/Usuario');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.cadastrar = async (req, res) => {
+exports.register = async (req, res) => {
     const { nome, email, login, senha } = req.body;
 
     try {
@@ -25,7 +25,7 @@ exports.cadastrar = async (req, res) => {
     }
 };
 
-exports.entrar = async (req, res) => {
+exports.login = async (req, res) => {
     const { identificador, senha } = req.body; // identificador = email ou login
 
     try {

@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/database');
-const User = require('./models/User');
+const User = require('./models/Usuario');
 
 dotenv.config();
 
