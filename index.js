@@ -7,6 +7,8 @@ dotenv.config();
 
 const app = express();
 
+const faltasRouter = require('./routes/faltas');
+
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/auth'));

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Falta, Aluno } = require('../models');
-const { Op } = require('sequelize');
+const { Falta } = require('../models/Falta');
 
 // Professor POST - registrar falta
 router.post('/', async (req, res) => {
