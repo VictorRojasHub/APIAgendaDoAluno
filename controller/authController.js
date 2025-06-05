@@ -1,53 +1,63 @@
-const Usuario = require('../models/Usuario');
+const Aluno = require('../models/Aluno');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.register = async (req, res) => {
-    const { nome, email, login, senha } = req.body;
+exports.cadastrar = async (req, res) => {
+    const { ra, nome, email, instituicao, senha, contato, curso, nivel, idade } = req.body;
 
     try {
-        const usuarioExistente = await Usuario.findOne({ where: { login } }) 
-            || await Usuario.findOne({ where: { email } });
+        const alunoExistente = await Aluno.findOne({ where: { ra } }) 
+            || await Aluno.findOne({ where: { email } });
         
-        if (usuarioExistente) {
-            return res.status(400).json({ mensagem: 'Usuário já existe' });
+        if (alunoExistente) {
+            return res.status(400).json({ mensagem: 'Aluno já cadastrado' });
         }
 
         const salt = await bcrypt.genSalt(10);
         const senhaCriptografada = await bcrypt.hash(senha, salt);
 
-        await Usuario.create({ nome, email, login, senha: senhaCriptografada });
+        await Aluno.create({
+            ra,
+            nome,
+            email,
+            instituicao,
+            senha: senhaCriptografada,
+            contato,
+            curso,
+            nivel,
+            idade
+        });
 
-        res.status(201).json({ mensagem: 'Usuário criado com sucesso' });
+        res.status(201).json({ mensagem: 'Aluno cadastrado com sucesso' });
     } catch (erro) {
         console.error(erro);
         res.status(500).send('Erro no servidor');
     }
 };
 
-exports.login = async (req, res) => {
-    const { identificador, senha } = req.body; // identificador = email ou login
+exports.entrar = async (req, res) => {
+    const { identificador, senha } = req.body; // identificador = email ou ra
 
     try {
-        const usuario = await Usuario.findOne({
+        const aluno = await Aluno.findOne({
             where: {
-                [Usuario.sequelize.Op.or]: [
+                [Aluno.sequelize.Op.or]: [
                     { email: identificador },
-                    { login: identificador }
+                    { ra: identificador }
                 ]
             }
         });
 
-        if (!usuario) {
+        if (!aluno) {
             return res.status(400).json({ mensagem: 'Credenciais inválidas' });
         }
 
-        const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+        const senhaCorreta = await bcrypt.compare(senha, aluno.senha);
         if (!senhaCorreta) {
             return res.status(400).json({ mensagem: 'Credenciais inválidas' });
         }
 
-        const payload = { idUsuario: usuario.id };
+        const payload = { idAluno: aluno.id_aluno };
 
         const token = jwt.sign(payload, process.env.JWT_SECRETO, { expiresIn: '1h' });
 
