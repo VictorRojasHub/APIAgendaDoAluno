@@ -2,7 +2,7 @@ const Aluno = require('../models/Aluno');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-exports.cadastrar = async (req, res) => {
+exports.register = async (req, res) => {
     const { ra, nome, email, instituicao, senha, contato, curso, nivel, idade } = req.body;
 
     try {
@@ -35,7 +35,7 @@ exports.cadastrar = async (req, res) => {
     }
 };
 
-exports.entrar = async (req, res) => {
+exports.login = async (req, res) => {
     const { identificador, senha } = req.body; // identificador = email ou ra
 
     try {
