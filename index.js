@@ -12,6 +12,7 @@ app.use('/api/faltas', require('./routes/faltas'));
 app.use('/api/professores', require('./routes/professor'));
 app.use('/api/anotacoes', require('./routes/anotacoes'));
 app.use('/api/alunos', require('./routes/aluno'));
+app.use('/api/calendario', require('./routes/calendario'));
 
 const PORT = process.env.PORT || 5000;
 
